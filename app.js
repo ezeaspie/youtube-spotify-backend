@@ -13,10 +13,8 @@ let redirect_uri =
 .then(res=>res.json())
 .then(json => console.log(json));*/
 
-app.set('view engine', 'ejs');
-
 app.get("/",(req,res)=>{
-    res.render("./pages/index");
+    res.send("hi");
 })
 
 app.get('/login', function(req, res) {
