@@ -1,0 +1,17 @@
+{
+  "name": "youtube-spotify-app",
+  "version": "1.0.0",
+  "description": "App that connects Youtube Playlists to Spotify Playlists",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ezequiel Espinoza",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "node-fetch": "^2.3.0",
+    "querystring": "^0.2.0",
+    "request": "^2.88.0"
+  }
+}
