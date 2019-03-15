@@ -10,7 +10,10 @@
   "author": "Ezequiel Espinoza",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
+    "googleapis": "^37.2.0",
     "node-fetch": "^2.3.0",
     "querystring": "^0.2.0",
     "request": "^2.88.0"
