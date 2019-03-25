@@ -178,42 +178,58 @@ app.post('/generatePlaylist',(req,res)=>{
 
     //Add videos to the newly created Playlist
 
-    function addToPlaylist(id,playlistID) {
-      return new Promise((resolve,reject)=>{
-        var details = {
-          videoId: id,
-          kind: 'youtube#video'
-        }
-
-        service.playlistItems.insert({
-          part: 'snippet',
-          auth : oauth2Client,
-          resource: {
-            snippet: {
-              playlistId: playlistID,
-              resourceId: details
-            }
-          }
-        },(err,response)=>{
-          if (err) {
-            reject(Error('The API returned an error: ' + err));
-            return;
-          }
-          setTimeout(()=>resolve(response),3000);
-        });
-      })
-    }
-
     createNewPlaylist()
     .then(playlistID=>{
-      let videoInsertPromises = videoIds.map(video=>{addToPlaylist(video,playlistID)});
-      Promise.all(videoInsertPromises)
-      .then(()=>{
-        console.log("PLAYLIST CREATED"),
-        res.json({playlistURL});
-      });
+      let counter = 0;
+
+      function addToPlaylist(id,playlistID) {
+        return new Promise((resolve,reject)=>{
+          var details = {
+            videoId: id,
+            kind: 'youtube#video'
+          }
+  
+          service.playlistItems.insert({
+            part: 'snippet',
+            auth : oauth2Client,
+            resource: {
+              snippet: {
+                playlistId: playlistID,
+                resourceId: details
+              }
+            }
+          },(err,response)=>{
+            if (err) {
+              reject(Error('The API returned an error: ' + err));
+              return;
+            }
+            console.log(`added video ${counter}`)
+            resolve(response);
+          });
+        })
+      }
+
+      const addVideosToPlaylist = () => {
+        myLoop(videoIds[0]);
+      }
+       
+      const myLoop = (video_id) => {
+        addToPlaylist(video_id,playlistID);
+        setTimeout(()=>{
+            counter++;
+            if(counter < videoIds.length){
+              myLoop(videoIds[counter]);
+            }
+            else{
+              console.log("finished")
+              res.json({playlistURL});
+            }
+        }, 3000);
+      }
+      addVideosToPlaylist();
+    }
+    )
     })
-})
 
 app.get("/ytcallback",(req,res)=>{
   //Authentication Code
